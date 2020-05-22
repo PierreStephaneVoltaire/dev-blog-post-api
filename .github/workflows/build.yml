@@ -1,0 +1,40 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master,feature/*,develop]
+  pull_request:
+    branches: [ master,develop ]
+jobs:
+  deployservers:
+    - runs-on: ubuntu-latest
+      steps:
+      - name: HashiCorp - Setup Terraform
+        uses: hashicorp/setup-terraform@v1.0.1
+      - name: Checkout source code
+          uses: actions/checkout
+      - name: Cache node modules0
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+      - name: Install
+        run: npm install
+      - name: Lint
+        run: npm run lint api
+      - name: Test api
+        run: npm run test api
+      - name: Build
+        run: npm run build api
+      - name: Terraform Init
+        uses: hashicorp/setup-terraform@v1
+        run: |
+          terraform init -input=false
+          terraform plan -input=false
