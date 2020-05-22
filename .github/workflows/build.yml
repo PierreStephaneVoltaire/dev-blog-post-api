@@ -33,8 +33,7 @@ jobs:
           run: npm run test api
         - name: Build
           run: npm run build api
-        - name: Terraform Init
-          uses: hashicorp/setup-terraform@v1
-            run:|
-              terraform init -input=false
-              terraform plan -input=false
+        - name: 'Terraform Init'
+          run: terraform init
+        - name: 'Terraform Plan'
+          run: terraform plan
