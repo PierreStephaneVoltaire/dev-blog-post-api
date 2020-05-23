@@ -25,8 +25,8 @@ jobs:
             restore-keys: |
               ${{ runner.OS }}-build-
               ${{ runner.OS }}-
-        - name: action-yarn
-          uses: comchangs/action-yarn@v0.1-beta
+        - name: install
+          uses: sudo npm i -g yarn
         - name: Build
           run: yarn build
         - name: 'Terraform Init'
