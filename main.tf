@@ -38,7 +38,7 @@ resource "null_resource" "docker_build" {
   }
 
   provisioner "local-exec" {
-    command = "docker build  -t devblog --build-arg api_port=${var.api_port} --build-arg  api_port=${var.api_secure_port}"
+    command = "docker build  -t devblog --build-arg api_port=${var.api_port} --build-arg  api_port=${var.api_secure_port} ."
   }
   provisioner "local-exec" {
     command = "docker save devblog | gzip > devblog.tar.gz"
