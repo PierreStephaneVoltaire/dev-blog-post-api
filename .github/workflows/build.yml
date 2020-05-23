@@ -13,8 +13,8 @@ jobs:
   deployservers:
      runs-on: ubuntu-latest
      env:
-       TF_AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
-       TF_AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
+       TF_aws_access_key_id: ${{ secrets.aws_access_key_id }}
+       TF_aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
        AWS_ACCESS_KEY_ID: ${{ secrets.iam_aws_access_key_id }}
        AWS_SECRET_ACCESS_KEY: ${{ secrets.iam_aws_secret_access_key }}
        TF_region: ${{ secrets.region }}
