@@ -13,8 +13,6 @@ jobs:
   deployservers:
      runs-on: ubuntu-latest
      steps:
-        - name: HashiCorp - Setup Terraform
-          uses: hashicorp/setup-terraform@v1.0.1
         - name: Checkout source code
           uses: actions/checkout@master
         - name: Cache node modules0
@@ -29,6 +27,10 @@ jobs:
           run: sudo npm i -g yarn && yarn
         - name: Build
           run: yarn build
+        - name: check dir
+          run: ls
+        - name: HashiCorp - Setup Terraform
+          uses: hashicorp/setup-terraform@v1.0.1
         - name: 'Terraform Init'
           run: terraform init
         - name: 'Terraform Plan'
