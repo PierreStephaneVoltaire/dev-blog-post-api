@@ -68,7 +68,6 @@ Services/post-api/.env
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
-*.tf
 *.tfvars
 dist
 */dist
