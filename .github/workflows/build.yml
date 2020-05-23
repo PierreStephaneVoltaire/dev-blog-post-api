@@ -11,56 +11,56 @@ on:
     branches: [ master,develop ]
 jobs:
   deployservers:
-     runs-on: ubuntu-latest
-     env:
-       TF_aws_access_key_id: ${{ secrets.aws_access_key_id }}
-       TF_aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
-       AWS_ACCESS_KEY_ID: ${{ secrets.iam_aws_access_key_id }}
-       AWS_SECRET_ACCESS_KEY: ${{ secrets.iam_aws_secret_access_key }}
-       TF_region: ${{ secrets.region }}
-       TF_db_type: ${{ secrets.db_type }}
-       TF_db_host: ${{ secrets.db_host }}
-       TF_db_port: ${{ secrets.db_port}}
-       TF_db_username: ${{ secrets.db_username}}
-       TF_db_password: ${{ secrets.db_password }}
-       TF_db_database: ${{ secrets.db_database }}
-       TF_api_port: ${{ secrets.api_port}}
-       TF_posts: ${{ secrets.posts }}
-       TF_environment: ${{ secrets.environment}}
-       TF_redis_pass: ${{ secrets.redis_pass }}
-       TF_api_secure_port: ${{ secrets.api_secure_port }}
-       cert : ${{secrets.cert}}
-       privkey : ${{secrets.privkey}}
-       aws_key : ${{secrets.aws_key}}
-     steps:
-        - name: Checkout source code
-          uses: actions/checkout@master
-        - name: add envs
-          run: |
-            touch src/assets/cert.pem src/assets/privkey.pem
-            echo $cert  >> src/assets/cert.pem
-            echo $privkey  >> src/assets/privkey.pem
-            echo $aws_key  >> aws_key.pem
+    runs-on: ubuntu-latest
+    env:
+      TF_VAR_aws_access_key_id: ${{ secrets.aws_access_key_id }}
+      TF_VAR_aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.iam_aws_access_key_id }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.iam_aws_secret_access_key }}
+      TF_VAR_region: ${{ secrets.region }}
+      TF_VAR_db_type: ${{ secrets.db_type }}
+      TF_VAR_db_host: ${{ secrets.db_host }}
+      TF_VAR_db_port: ${{ secrets.db_port}}
+      TF_VAR_db_username: ${{ secrets.db_username}}
+      TF_VAR_db_password: ${{ secrets.db_password }}
+      TF_VAR_db_database: ${{ secrets.db_database }}
+      TF_VAR_api_port: ${{ secrets.api_port}}
+      TF_VAR_posts: ${{ secrets.posts }}
+      TF_VAR_environment: ${{ secrets.environment}}
+      TF_VAR_redis_pass: ${{ secrets.redis_pass }}
+      TF_VAR_api_secure_port: ${{ secrets.api_secure_port }}
+      cert: ${{secrets.cert}}
+      privkey: ${{secrets.privkey}}
+      aws_key: ${{secrets.aws_key}}
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@master
+      - name: add envs
+        run: |
+          touch src/assets/cert.pem src/assets/privkey.pem
+          echo $cert  >> src/assets/cert.pem
+          echo $privkey  >> src/assets/privkey.pem
+          echo $aws_key  >> aws_key.pem
 
 
-        - name: Cache node modules0
-          uses: actions/cache@v1
-          with:
-            path: node_modules
-            key: ${{ runner.OS }}-build-${{ hashFiles('**/yarn.lock') }}
-            restore-keys: |
-              ${{ runner.OS }}-build-
-              ${{ runner.OS }}-
-        - name: install
-          run: sudo npm i -g yarn && yarn
-        - name: Build
-          run: yarn build
-        - name: check dir
-          run: ls
-        - name: HashiCorp - Setup Terraform
-          uses: hashicorp/setup-terraform@v1.0.1
-        - name: 'Terraform Init'
-          run: terraform init
-        - name: 'Terraform Plan'
-          run: terraform plan -input=false
+      - name: Cache node modules0
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+      - name: install
+        run: sudo npm i -g yarn && yarn
+      - name: Build
+        run: yarn build
+      - name: check dir
+        run: ls
+      - name: HashiCorp - Setup Terraform
+        uses: hashicorp/setup-terraform@v1.0.1
+      - name: 'Terraform Init'
+        run: terraform init
+      - name: 'Terraform Plan'
+        run: terraform plan -input=false
 
