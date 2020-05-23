@@ -26,7 +26,7 @@ jobs:
               ${{ runner.OS }}-build-
               ${{ runner.OS }}-
         - name: install
-          uses: sudo npm i -g yarn
+          run: sudo npm i -g yarn
         - name: Build
           run: yarn build
         - name: 'Terraform Init'
