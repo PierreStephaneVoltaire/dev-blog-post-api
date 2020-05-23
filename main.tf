@@ -126,7 +126,7 @@ resource "null_resource" "docker_deploy" {
   provisioner "remote-exec" {
     inline = [
     "sudo docker load --input devblog.tar.gz",
-      "sudo docker run -d -p ${var.api_port}:${var.api_port} -p ${var.api_secure_port}:${var.api_secure_port} --env aws_access_key_id=${var.aws_access_key_id} --env aws_secret_access_key=${var.aws_secret_access_key}   --env region=${var.region} --env db_type=${var.db_type}  --env db_host=${var.db_host} --env db_port=${var.db_port} --env db_username=${var.db_username} --env db_password=${var.db_password} --env  db_database=${var.db_database} --env api_port=${var.api_port} --env environment=${var.environment} devblog",
+      "sudo docker-compose up",
       "echo \"updated\">>text.txt"
     ]
   }
