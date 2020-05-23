@@ -27,8 +27,8 @@ jobs:
               ${{ runner.OS }}-
         - name: Install yarn
           run: npm i -g yarn
-        - name: Install
-          run: yarn
+        - name: action-yarn
+          uses: comchangs/action-yarn@v0.1-beta
         - name: Build
           run: yarn build
         - name: 'Terraform Init'
