@@ -36,9 +36,9 @@ jobs:
         - name: add envs
           run: |
             touch src/assets/cert.pem src/assets/privkey.pem
-            echo ${{ secrets.cert }} >> src/assets/cert.pem
-            echo ${{ secrets.privkey }} >> src/assets/privkey.pem
-            echo ${{ secrets.aws_key }} >> aws_key.pem
+            echo $cert  >> src/assets/cert.pem
+            echo $privkey  >> src/assets/privkey.pem
+            echo $aws_key  >> aws_key.pem
 
 
         - name: Cache node modules0
