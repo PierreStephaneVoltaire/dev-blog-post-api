@@ -19,7 +19,6 @@ services:
       - db_password=${TF_VAR_db_password}
       - db_database=${TF_VAR_db_database}
       - api_port=${TF_VAR_api_port}
-      - api_secure_port=${TF_VAR_secure_port}
       - environment=${TF_VAR_environment}
       - redis_pass=${TF_VAR_redis_pass}
       - api_secure_port=${TF_VAR_api_secure_port}
