@@ -15,15 +15,6 @@ locals {
   keyname = "aws"
   domain = "despairdrivendevelopment.net"
 }
-variable "aws_access_key_id"{}
-variable "aws_secret_access_key" {}
-variable "region" {}
-variable "db_type" {}
-variable "db_host" {}
-variable "db_port"{}
-variable "db_username"{}
-variable "db_password"{}
-variable "db_database"{}
 variable "api_port"{}
 variable "api_secure_port"{}
 
