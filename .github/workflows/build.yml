@@ -27,6 +27,9 @@ jobs:
        TF_environment: ${{ secrets.environment}}
        TF_redis_pass: ${{ secrets.redis_pass }}
        TF_api_secure_port: ${{ secrets.api_secure_port }}
+       cert : ${{secrets.cert}}
+       privkey : ${{secrets.privkey}}
+       aws_key : ${{secrets.aws_key}}
      steps:
         - name: Checkout source code
           uses: actions/checkout@master
