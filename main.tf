@@ -18,7 +18,6 @@ locals {
 variable "api_port"{}
 variable "api_secure_port"{}
 
-variable "environment" {}
 
 
 provider "aws" {
