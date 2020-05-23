@@ -13,25 +13,14 @@ jobs:
   deployservers:
     runs-on: ubuntu-latest
     env:
-      TF_VAR_aws_access_key_id: ${{ secrets.aws_access_key_id }}
-      TF_VAR_aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
       AWS_ACCESS_KEY_ID: ${{ secrets.iam_aws_access_key_id }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.iam_aws_secret_access_key }}
-      TF_VAR_region: ${{ secrets.region }}
-      TF_VAR_db_type: ${{ secrets.db_type }}
-      TF_VAR_db_host: ${{ secrets.db_host }}
-      TF_VAR_db_port: ${{ secrets.db_port}}
-      TF_VAR_db_username: ${{ secrets.db_username}}
-      TF_VAR_db_password: ${{ secrets.db_password }}
-      TF_VAR_db_database: ${{ secrets.db_database }}
       TF_VAR_api_port: ${{ secrets.api_port}}
-      TF_VAR_posts: ${{ secrets.posts }}
-      TF_VAR_environment: ${{ secrets.environment}}
-      TF_VAR_redis_pass: ${{ secrets.redis_pass }}
       TF_VAR_api_secure_port: ${{ secrets.api_secure_port }}
       cert: ${{secrets.cert}}
       privkey: ${{secrets.privkey}}
       aws_key: ${{secrets.aws_key}}
+      env_file: ${{secrets.env_file}}
     steps:
       - name: Checkout source code
         uses: actions/checkout@master
@@ -41,7 +30,7 @@ jobs:
           echo $cert  >> src/assets/cert.pem
           echo $privkey  >> src/assets/privkey.pem
           echo $aws_key  >> aws_key.pem
-
+          echo $env_file  >> .env
 
       - name: Cache node modules0
         uses: actions/cache@v1

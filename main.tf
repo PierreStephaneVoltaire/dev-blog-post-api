@@ -43,10 +43,12 @@ resource "null_resource" "docker_build" {
   triggers = {
     dockerfile = filemd5("Dockerfile")
     dockercomposefile=filemd5("docker-compose.yml")
+    dockercomposefile=filemd5(".env")
+
   }
 
   provisioner "local-exec" {
-    command = "docker-compose build"
+    command = "docker build  -t devblog --build-arg api_port=${var.api_port} --build-arg  api_port=${var.api_secure_port}"
   }
   provisioner "local-exec" {
     command = "docker save devblog | gzip > devblog.tar.gz"
@@ -113,7 +115,10 @@ resource "null_resource" "docker_deploy" {
     host = self.triggers.public_ip
     private_key = tls_private_key.aws.private_key_pem
   }
-
+  provisioner "file" {
+    source = ".env"
+    destination = ".env"
+  }
   provisioner "file" {
     source = "devblog.tar.gz"
     destination = "devblog.tar.gz"
