@@ -12,28 +12,28 @@ on:
 jobs:
   deployservers:
      runs-on: ubuntu-latest
+     env:
+       TF_aws_access_key_id: ${{ secrets.aws_access_key_id }}
+       TF_aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
+       TF_AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
+       TF_AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
+       TF_region: ${{ secrets.region }}
+       TF_db_type: ${{ secrets.db_type }}
+       TF_db_host: ${{ secrets.db_host }}
+       TF_db_port: ${{ secrets.db_port}}
+       TF_db_username: ${{ secrets.db_username}}
+       TF_db_password: ${{ secrets.db_password }}
+       TF_db_database: ${{ secrets.db_database }}
+       TF_api_port: ${{ secrets.api_port}}
+       TF_posts: ${{ secrets.posts }}
+       TF_environment: ${{ secrets.environment}}
+       TF_redis_pass: ${{ secrets.redis_pass }}
+       TF_api_secure_port: ${{ secrets.api_secure_port }}
      steps:
         - name: Checkout source code
           uses: actions/checkout@master
         - name: add envs
           run: |
-            export TF_aws_access_key_id=${{ secrets.aws_access_key_id }}
-            export TF_aws_secret_access_key=${{ secrets.aws_secret_access_key }}
-            export TF_AWS_ACCESS_KEY_ID=${{ secrets.aws_access_key_id }}
-            export TF_AWS_SECRET_ACCESS_KEY=${{ secrets.aws_secret_access_key }}
-            export TF_region=${{ secrets.region }}
-            export TF_db_type=${{ secrets.db_type }}
-            export TF_db_host=${{ secrets.db_host }}
-            export TF_db_port=${{ secrets.db_port}}
-            export TF_db_username=${{ secrets.db_username}}
-            export TF_db_password=${{ secrets.db_password }}
-            export TF_db_database=${{ secrets.db_database }}
-            export TF_api_port=${{ secrets.api_port}}
-            export TF_api_secure_port=${{ secrets.secure_port }}
-            export TF_posts=${{ secrets.posts }}
-            export TF_environment=${{ secrets.environment}}
-            export TF_redis_pass=${{ secrets.redis_pass }}
-            export TF_api_secure_port=${{ secrets.api_secure_port }}
             touch src/assets/cert.pem src/assets/privkey.pem
             echo ${{ secrets.cert }} >> src/assets/cert.pem
             echo ${{ secrets.privkey }} >> src/assets/privkey.pem
