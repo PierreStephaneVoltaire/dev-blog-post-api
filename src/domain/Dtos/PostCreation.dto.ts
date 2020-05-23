@@ -4,21 +4,23 @@ import { Mapper } from '../../libs/mapper';
 
 export class CreatePostDto {
   @ApiProperty()
-  PostTitle: string;
+  readonly PostTitle: string;
   @ApiProperty()
-  PostSubTitle: string;
+  readonly PostSubTitle: string;
   @ApiProperty()
-  PostThumbNailImage: string;
+  readonly PostThumbNailImage: string;
   @ApiProperty()
-  PostContent?: string;
+  readonly PostContent?: string;
   @ApiProperty()
-  author: string;
+  readonly author: string;
   @ApiProperty()
-  Meta: any;
+  readonly Meta: any;
 
   static convertToEntity(post: CreatePostDto): PostEntity {
     return Mapper.ConvertTo(PostEntity, post);
   }
+
+
+
+
 }
-
-

@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import {getEntityManagerToken, InjectRepository} from '@nestjs/typeorm';
 import { PostEntity } from '../../domain/entities/post.entity';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import {Connection, DeleteResult, EntityManager, InsertResult, Repository, UpdateResult} from 'typeorm';
 
 @Injectable()
 export class PostRepository {
 
   constructor(
     @InjectRepository(PostEntity)
-    private _postsRepository: Repository<PostEntity>
+    private _postsRepository: Repository<PostEntity>,private connection:Connection
   ) {
   }
 
@@ -29,8 +29,20 @@ export class PostRepository {
   }
 
   async addOne(newPost: PostEntity): Promise<PostEntity> {
-    const instance = this._postsRepository.create(newPost);
-    return this._postsRepository.save(instance);
+    try {
+
+      return this._postsRepository.save({
+        author:newPost.author,
+        PostContent:newPost.PostContent,
+         PostSubTitle:newPost.PostSubTitle,
+        PostThumbNailImage:newPost.PostThumbNailImage,
+        PostTitle:newPost.PostTitle,
+        // Meta:newPost.Meta
+      })
+    }
+    catch (e) {
+      console.log(typeof e)
+    }
   }
 
 

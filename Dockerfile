@@ -41,14 +41,14 @@ ARG api_secure_port=${api_secure_port}
 
 
 WORKDIR /usr/app
-RUN npm i -g  nodemon yarn @angular/cli @nrwl/cli
+RUN npm i -g  nodemon yarn
 COPY package*.json ./
-RUN npm i
+RUN yarn
 COPY . .
-RUN npm run build api
+RUN yarn build
 FROM node:latest as serve
 COPY --from=builder /usr/app/node_modules node_modules
 COPY --from=builder /usr/app/dist dist
-CMD node dist/apps/api/main.js
+CMD node dist/main.js
 EXPOSE $api_port 443
 

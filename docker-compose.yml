@@ -6,17 +6,17 @@ networks:
   consul-demo:
 
 services:
-  app:
-    build: .
-    env_file:
-      - .env
-    container_name: devblog
-    image: devblog:latest
-
-    networks:
-      - app-tier
-    ports:
-      - "3336:3336"
+#  app:
+#    build: .
+#    env_file:
+#      - .env
+#    container_name: devblog
+#    image: devblog:latest
+#
+#    networks:
+#      - app-tier
+#    ports:
+#      - "3336:3336"
   redis:
     image: 'bitnami/redis:latest'
     container_name: ddd_cache
