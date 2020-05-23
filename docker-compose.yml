@@ -6,23 +6,36 @@ networks:
   consul-demo:
 
 services:
-#  app:
-#    build: .
-#    env_file:
-#      - .env
-#    container_name: devblog
-#    image: devblog:latest
-#
-#    networks:
-#      - app-tier
-#    ports:
-#      - "3336:3336"
+  app:
+    build: .
+    environment:
+      - aws_access_key_id=${TF_aws_access_key_id}
+      - aws_secret_access_key=${TF_aws_secret_access_key}
+      - region=${TF_region}
+      - db_type=${TF_db_type}
+      - db_host=${TF_db_host}
+      - db_port=${TF_db_port}
+      - db_username=${TF_db_username}
+      - db_password=${TF_db_password}
+      - db_database=${TF_db_database}
+      - api_port=${TF_api_port}
+      - api_secure_port=${TF_secure_port}
+      - environment=${TF_environment}
+      - redis_pass=${TF_redis_pass}
+      - api_secure_port=${TF_api_secure_port}
+    container_name: devblog
+    image: devblog:latest
+
+    networks:
+      - app-tier
+    ports:
+      - "${api_secure_port}:${api_secure_port}"
   redis:
     image: 'bitnami/redis:latest'
     container_name: ddd_cache
     environment:
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
-      - REDIS_PASSWORD=my_master_password
+      - REDIS_PASSWORD=${TF_redis_pass}
       - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
     ports:
       - '6379:6379'
@@ -33,7 +46,7 @@ services:
   consul-agent-1: &consul-agent
     image: consul:latest
     networks:
-      - consul-demo
+      - app-tier
     command: "agent -retry-join consul-server-bootstrap -client 0.0.0.0"
 
   consul-agent-2:

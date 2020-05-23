@@ -42,10 +42,11 @@ resource "tls_private_key" "aws" {
 resource "null_resource" "docker_build" {
   triggers = {
     dockerfile = filemd5("Dockerfile")
+    dockercomposefile=filemd5("Dockerfile")
   }
 
   provisioner "local-exec" {
-    command = "docker build  -t devblog --build-arg api_port=${var.api_port} --build-arg api_secure_port=${var.api_secure_port} --build-arg environment=prod ."
+    command = "docker-compose build"
   }
   provisioner "local-exec" {
     command = "docker save devblog | gzip > devblog.tar.gz"
@@ -53,7 +54,7 @@ resource "null_resource" "docker_build" {
 
   provisioner "local-exec" {
     when = destroy
-    command = "docker image prune && docker rmi devblog --force"
+    command = "docker rmi devblog --force"
   }
 }
 

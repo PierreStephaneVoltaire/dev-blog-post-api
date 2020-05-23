@@ -33,11 +33,14 @@ ENV db_database=${db_database}
 ARG api_port
 ENV api_port=${api_port}
 
-ARG environment=production
+ARG environment
 ENV environment=${environment}
 
-ARG api_secure_port=3337
+ARG api_secure_port
 ARG api_secure_port=${api_secure_port}
+
+ARG redis_pass
+ARG redis_pass=${redis_pass}
 
 
 WORKDIR /usr/app
@@ -50,5 +53,5 @@ FROM node:latest as serve
 COPY --from=builder /usr/app/node_modules node_modules
 COPY --from=builder /usr/app/dist dist
 CMD node dist/main.js
-EXPOSE $api_port 443
+EXPOSE $api_port $api_secure_port
 
