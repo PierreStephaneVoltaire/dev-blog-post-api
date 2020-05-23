@@ -9,20 +9,20 @@ services:
   app:
     build: .
     environment:
-      - aws_access_key_id=${TF_aws_access_key_id}
-      - aws_secret_access_key=${TF_aws_secret_access_key}
-      - region=${TF_region}
-      - db_type=${TF_db_type}
-      - db_host=${TF_db_host}
-      - db_port=${TF_db_port}
-      - db_username=${TF_db_username}
-      - db_password=${TF_db_password}
-      - db_database=${TF_db_database}
-      - api_port=${TF_api_port}
-      - api_secure_port=${TF_secure_port}
-      - environment=${TF_environment}
-      - redis_pass=${TF_redis_pass}
-      - api_secure_port=${TF_api_secure_port}
+      - aws_access_key_id=${TF_VAR_aws_access_key_id}
+      - aws_secret_access_key=${TF_VAR_aws_secret_access_key}
+      - region=${TF_VAR_region}
+      - db_type=${TF_VAR_db_type}
+      - db_host=${TF_VAR_db_host}
+      - db_port=${TF_VAR_db_port}
+      - db_username=${TF_VAR_db_username}
+      - db_password=${TF_VAR_db_password}
+      - db_database=${TF_VAR_db_database}
+      - api_port=${TF_VAR_api_port}
+      - api_secure_port=${TF_VAR_secure_port}
+      - environment=${TF_VAR_environment}
+      - redis_pass=${TF_VAR_redis_pass}
+      - api_secure_port=${TF_VAR_api_secure_port}
     container_name: devblog
     image: devblog:latest
 
@@ -35,7 +35,7 @@ services:
     container_name: ddd_cache
     environment:
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
-      - REDIS_PASSWORD=${TF_redis_pass}
+      - REDIS_PASSWORD=${TF_VAR_redis_pass}
       - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
     ports:
       - '6379:6379'

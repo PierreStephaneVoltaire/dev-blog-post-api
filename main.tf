@@ -42,7 +42,7 @@ resource "tls_private_key" "aws" {
 resource "null_resource" "docker_build" {
   triggers = {
     dockerfile = filemd5("Dockerfile")
-    dockercomposefile=filemd5("Dockerfile")
+    dockercomposefile=filemd5("docker-compose.yml")
   }
 
   provisioner "local-exec" {
@@ -117,6 +117,11 @@ resource "null_resource" "docker_deploy" {
   provisioner "file" {
     source = "devblog.tar.gz"
     destination = "devblog.tar.gz"
+  }
+
+  provisioner "file" {
+    source = "docker-compose.yml"
+    destination = "docker-compose.yml"
   }
   provisioner "remote-exec" {
     inline = [
