@@ -30,19 +30,20 @@ jobs:
           echo $cert  >> src/assets/cert.pem
           echo $privkey  >> src/assets/privkey.pem
           echo $aws_key  >> aws_key.pem
-          echo "redis_pass=${{ secrets.my_master_password}}
-                aws_access_key_id=${{ secrets.aws_access_key_id}}
-                aws_secret_access_key=${{ secrets.aws_secret_access_key}}
-                region=${{ secrets.region}}
-                db_type=${{ secrets.db_type}}
-                db_host=${{ secrets.db_host}}
-                db_port=${{ secrets.db_port}}
-                db_username=${{ secrets.db_username}}
-                db_password=${{ secrets.db_password}}
-                db_database=${{ secrets.db_database}}
-                api_port=${{ secrets.api_port}}
-                environment=${{ secrets.environment}}
-                api_secure_port=${{secrets.api_secure_port}}" >>.env;
+          echo "
+          redis_pass=\"${{ secrets.redis_pass}}\"
+          aws_access_key_id=\"${{ secrets.aws_access_key_id}}\"
+          aws_secret_access_key=\"${{ secrets.aws_secret_access_key}}\"
+          region=\"${{ secrets.region}}\"
+          db_type=\"${{ secrets.db_type}}\"
+          db_host=\"${{ secrets.db_host}}\"
+          db_port=\"${{ secrets.db_port}}\"
+          db_username=\"${{ secrets.db_username}}\"
+          db_password=\"${{ secrets.db_password}}\"
+          db_database=\"${{ secrets.db_database}}\"
+          api_port=\"${{ secrets.api_port}}\"
+          environment=\"${{ secrets.environment}}\"
+          api_secure_port=\"${{secrets.api_secure_port}}\"" >>.env;
       - name: Cache node modules0
         uses: actions/cache@v1
         with:

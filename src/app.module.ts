@@ -18,7 +18,7 @@ require('dotenv').config({ path: path.join(__dirname, '.env') });
   imports: [
     CacheModule.register({
       store: redisStore,
-      host: 'localhost',
+      host: 'redis',
       port: 6379,
       auth_pass: process.env.redis_pass,
       db: 4,
