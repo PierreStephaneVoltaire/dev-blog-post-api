@@ -40,6 +40,18 @@ services:
       - app-tier
     command: "agent -retry-join consul-server-bootstrap -client 0.0.0.0"
 
+  consul-agent-2:
+    <<: *consul-agent
+
+  consul-agent-3:
+    <<: *consul-agent
+
+  consul-server-1: &consul-server
+    <<: *consul-agent
+    command: "agent -server -retry-join consul-server-bootstrap -client 0.0.0.0"
+  consul-server-2:
+    <<: *consul-server
+
   consul-server-bootstrap:
     <<: *consul-agent
     ports:
@@ -47,7 +59,7 @@ services:
       - "8500:8500"
       - "8600:8600"
       - "8600:8600/udp"
-    command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0"
+    command: "agent -server -bootstrap-expect 3 -ui -client 0.0.0.0"
 
 
 volumes:

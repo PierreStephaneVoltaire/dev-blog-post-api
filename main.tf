@@ -121,8 +121,7 @@ resource "null_resource" "docker_deploy" {
   provisioner "remote-exec" {
     inline = [
     "sudo docker load --input devblog.tar.gz",
-      "sudo docker-compose up",
-      "echo \"updated\">>text.txt"
+      "sudo docker-compose up -d",
     ]
   }
 }
