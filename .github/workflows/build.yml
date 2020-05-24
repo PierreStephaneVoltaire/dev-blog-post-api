@@ -29,8 +29,8 @@ jobs:
           touch src/assets/cert.pem src/assets/privkey.pem
           echo $cert >> cert.txt
           echo $privkey   >> privkey.txt
-          echo base64 --decode cert.txt >> src/assets/cert.pem
-          echo base64 --decode privkey.txt >> src/assets/privkey.pem
+          base64 --decode cert.txt >> src/assets/cert.pem
+          base64 --decode privkey.txt >> src/assets/privkey.pem
           echo $aws_key  >> aws_key.pem
           echo "
           redis_pass=${{ secrets.redis_pass}}
