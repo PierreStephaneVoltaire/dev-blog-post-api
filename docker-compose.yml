@@ -12,6 +12,9 @@ services:
       - .env
     container_name: devblog
     image: devblog:latest
+    depends_on:
+      - redis
+      - consul-server-bootstrap
     networks:
       - app-tier
     ports:
