@@ -11,53 +11,47 @@ on:
     branches: [ master,develop ]
 jobs:
   deployservers:
-     runs-on: ubuntu-latest
-     steps:
-        - name: Checkout source code
-          uses: actions/checkout@master
-        - name: add envs
-          run: |
-            export TF_aws_access_key_id=${{ secrets.aws_access_key_id }}
-            export TF_aws_secret_access_key=${{ secrets.aws_secret_access_key }}
-            export TF_AWS_ACCESS_KEY_ID=${{ secrets.aws_access_key_id }}
-            export TF_AWS_SECRET_ACCESS_KEY=${{ secrets.aws_secret_access_key }}
-            export TF_region=${{ secrets.region }}
-            export TF_db_type=${{ secrets.db_type }}
-            export TF_db_host=${{ secrets.db_host }}
-            export TF_db_port=${{ secrets.db_port}}
-            export TF_db_username=${{ secrets.db_username}}
-            export TF_db_password=${{ secrets.db_password }}
-            export TF_db_database=${{ secrets.db_database }}
-            export TF_api_port=${{ secrets.api_port}}
-            export TF_api_secure_port=${{ secrets.secure_port }}
-            export TF_posts=${{ secrets.posts }}
-            export TF_environment=${{ secrets.environment}}
-            export TF_redis_pass=${{ secrets.redis_pass }}
-            export TF_api_secure_port=${{ secrets.api_secure_port }}
-            touch src/assets/cert.pem src/assets/privkey.pem
-            echo ${{ secrets.cert }} >> src/assets/cert.pem
-            echo ${{ secrets.privkey }} >> src/assets/privkey.pem
-            echo ${{ secrets.aws_key }} >> aws_key.pem
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.iam_aws_access_key_id }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.iam_aws_secret_access_key }}
+      TF_VAR_api_port: ${{ secrets.api_port}}
+      TF_VAR_api_secure_port: ${{ secrets.api_secure_port }}
+      cert: ${{secrets.cert}}
+      privkey: ${{secrets.privkey}}
+      aws_key: ${{secrets.aws_key}}
+      env_file: ${{secrets.env_file}}
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@master
+      - name: add envs
+        run: |
+          touch src/assets/cert.pem src/assets/privkey.pem
+          echo $cert  >> src/assets/cert.pem
+          echo $privkey  >> src/assets/privkey.pem
+          echo $aws_key  >> aws_key.pem
+          echo $env_file  >> .env
 
-
-        - name: Cache node modules0
-          uses: actions/cache@v1
-          with:
-            path: node_modules
-            key: ${{ runner.OS }}-build-${{ hashFiles('**/yarn.lock') }}
-            restore-keys: |
-              ${{ runner.OS }}-build-
-              ${{ runner.OS }}-
-        - name: install
-          run: sudo npm i -g yarn && yarn
-        - name: Build
-          run: yarn build
-        - name: check dir
-          run: ls
-        - name: HashiCorp - Setup Terraform
-          uses: hashicorp/setup-terraform@v1.0.1
-        - name: 'Terraform Init'
-          run: terraform init
-        - name: 'Terraform Plan'
-          run: terraform plan
+      - name: Cache node modules0
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+      - name: install
+        run: sudo npm i -g yarn && yarn
+      - name: Build
+        run: yarn build
+      - name: check dir
+        run: ls
+      - name: HashiCorp - Setup Terraform
+        uses: hashicorp/setup-terraform@v1.0.1
+      - name: 'Terraform Init'
+        run: terraform init
+      - name: 'Terraform Plan'
+        run: terraform plan -input=false
+      - name: 'Terraform apply'
+        run: terraform apply -input=false -auto-approve
 

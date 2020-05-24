@@ -8,34 +8,22 @@ networks:
 services:
   app:
     build: .
-    environment:
-      - aws_access_key_id=${TF_aws_access_key_id}
-      - aws_secret_access_key=${TF_aws_secret_access_key}
-      - region=${TF_region}
-      - db_type=${TF_db_type}
-      - db_host=${TF_db_host}
-      - db_port=${TF_db_port}
-      - db_username=${TF_db_username}
-      - db_password=${TF_db_password}
-      - db_database=${TF_db_database}
-      - api_port=${TF_api_port}
-      - api_secure_port=${TF_secure_port}
-      - environment=${TF_environment}
-      - redis_pass=${TF_redis_pass}
-      - api_secure_port=${TF_api_secure_port}
+    env_file:
+      - .env
     container_name: devblog
     image: devblog:latest
-
     networks:
       - app-tier
     ports:
-      - "${api_secure_port}:${api_secure_port}"
+      - "443:443"
   redis:
     image: 'bitnami/redis:latest'
     container_name: ddd_cache
+    env_file:
+      - .env
     environment:
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
-      - REDIS_PASSWORD=${TF_redis_pass}
+      - REDIS_PASSWORD=$redis_pass
       - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
     ports:
       - '6379:6379'
@@ -49,18 +37,6 @@ services:
       - app-tier
     command: "agent -retry-join consul-server-bootstrap -client 0.0.0.0"
 
-  consul-agent-2:
-    <<: *consul-agent
-
-  consul-agent-3:
-    <<: *consul-agent
-
-  consul-server-1: &consul-server
-    <<: *consul-agent
-    command: "agent -server -retry-join consul-server-bootstrap -client 0.0.0.0"
-  consul-server-2:
-    <<: *consul-server
-
   consul-server-bootstrap:
     <<: *consul-agent
     ports:
@@ -68,9 +44,12 @@ services:
       - "8500:8500"
       - "8600:8600"
       - "8600:8600/udp"
-    command: "agent -server -bootstrap-expect 3 -ui -client 0.0.0.0"
+    command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0"
 
 
 volumes:
   redis_data:
     driver: local
+
+
+

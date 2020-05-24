@@ -15,19 +15,9 @@ locals {
   keyname = "aws"
   domain = "despairdrivendevelopment.net"
 }
-variable "aws_access_key_id"{}
-variable "aws_secret_access_key" {}
-variable "region" {}
-variable "db_type" {}
-variable "db_host" {}
-variable "db_port"{}
-variable "db_username"{}
-variable "db_password"{}
-variable "db_database"{}
 variable "api_port"{}
 variable "api_secure_port"{}
 
-variable "environment" {}
 
 
 provider "aws" {
@@ -42,11 +32,13 @@ resource "tls_private_key" "aws" {
 resource "null_resource" "docker_build" {
   triggers = {
     dockerfile = filemd5("Dockerfile")
-    dockercomposefile=filemd5("Dockerfile")
+    dockercomposefile=filemd5("docker-compose.yml")
+    dockercomposefile=filemd5(".env")
+
   }
 
   provisioner "local-exec" {
-    command = "docker-compose build"
+    command = "docker build  -t devblog --build-arg api_port=${var.api_port} --build-arg  api_port=${var.api_secure_port} ."
   }
   provisioner "local-exec" {
     command = "docker save devblog | gzip > devblog.tar.gz"
@@ -113,15 +105,23 @@ resource "null_resource" "docker_deploy" {
     host = self.triggers.public_ip
     private_key = tls_private_key.aws.private_key_pem
   }
-
+  provisioner "file" {
+    source = ".env"
+    destination = ".env"
+  }
   provisioner "file" {
     source = "devblog.tar.gz"
     destination = "devblog.tar.gz"
   }
+
+  provisioner "file" {
+    source = "docker-compose.yml"
+    destination = "docker-compose.yml"
+  }
   provisioner "remote-exec" {
     inline = [
     "sudo docker load --input devblog.tar.gz",
-      "sudo docker run -d -p ${var.api_port}:${var.api_port} -p ${var.api_secure_port}:${var.api_secure_port} --env aws_access_key_id=${var.aws_access_key_id} --env aws_secret_access_key=${var.aws_secret_access_key}   --env region=${var.region} --env db_type=${var.db_type}  --env db_host=${var.db_host} --env db_port=${var.db_port} --env db_username=${var.db_username} --env db_password=${var.db_password} --env  db_database=${var.db_database} --env api_port=${var.api_port} --env environment=${var.environment} devblog",
+      "sudo docker-compose up",
       "echo \"updated\">>text.txt"
     ]
   }
